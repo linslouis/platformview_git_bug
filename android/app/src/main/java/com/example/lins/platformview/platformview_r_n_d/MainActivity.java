@@ -3,7 +3,7 @@ package com.example.lins.platformview.platformview_r_n_d;
 import androidx.annotation.NonNull;
 
 
-import com.example.lins.platformview.platformview_r_n_d.plugin.VideoPlayerPlugin;
+import com.example.lins.platformview.platformview_r_n_d.plugin.SurfaceViewPlugin;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -16,7 +16,7 @@ public class MainActivity extends FlutterActivity {
         super.configureFlutterEngine(flutterEngine);
         GeneratedPluginRegistrant.registerWith(flutterEngine);
 
-       flutterEngine.getPlugins().add(new VideoPlayerPlugin());
+       flutterEngine.getPlugins().add(new SurfaceViewPlugin());
 
     }
 }

@@ -16,12 +16,12 @@ import java.io.InputStream;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.platform.PlatformView;
 
-public class AndroidVideoPlayer implements PlatformView {
+public class AndroidSurfaceView implements PlatformView {
 
     private final SurfaceView surfaceView;
     private Bitmap imageBitmap = null;
 
-    public AndroidVideoPlayer(Context context, BinaryMessenger messenger, int viewId) {
+    public AndroidSurfaceView(Context context, BinaryMessenger messenger, int viewId) {
         surfaceView = new SurfaceView(context);
 
 
