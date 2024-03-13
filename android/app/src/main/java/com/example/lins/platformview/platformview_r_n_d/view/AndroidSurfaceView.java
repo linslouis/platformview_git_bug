@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import java.io.InputStream;
 
+import io.flutter.Log;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.platform.PlatformView;
 
@@ -86,5 +87,17 @@ public class AndroidSurfaceView implements PlatformView {
     @Override
     public void dispose() {
         // Clean up any resources here if necessary
+    }
+
+    @Override
+    public void onInputConnectionLocked() {
+        PlatformView.super.onInputConnectionLocked();
+        Log.d("AndroidSurfaceView", "onInputConnectionLocked");
+    }
+
+    @Override
+    public void onInputConnectionUnlocked() {
+        PlatformView.super.onInputConnectionUnlocked();
+        Log.d("AndroidSurfaceView", "onInputConnectionUnlocked");
     }
 }
