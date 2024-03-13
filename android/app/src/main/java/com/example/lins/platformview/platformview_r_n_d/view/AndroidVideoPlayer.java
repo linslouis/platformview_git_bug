@@ -1,81 +1,90 @@
 package com.example.lins.platformview.platformview_r_n_d.view;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
-import android.widget.VideoView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.InputStream;
+
 import io.flutter.plugin.common.BinaryMessenger;
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformView;
 
-public class AndroidVideoPlayer implements PlatformView, MethodChannel.MethodCallHandler {
+public class AndroidVideoPlayer implements PlatformView {
 
-    private final VideoView videoView;
-    private int currentPosition = 0;
-    private boolean isPlaying = false;
+    private final SurfaceView surfaceView;
+    private Bitmap imageBitmap = null;
 
     public AndroidVideoPlayer(Context context, BinaryMessenger messenger, int viewId) {
+        surfaceView = new SurfaceView(context);
 
-        videoView = new VideoView(context);
-        MethodChannel methodChannel = new MethodChannel(messenger, "lins.platform.learn/VideoPlayer_" + viewId);
-        methodChannel.setMethodCallHandler(this);
 
-        Uri videoUri = Uri.parse("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4");
-        videoView.setVideoURI(videoUri);
-        videoView.setOnPreparedListener(mp -> {
-            if (!isPlaying) {
-                videoView.start();
-                videoView.seekTo(currentPosition);
+        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(@NonNull SurfaceHolder holder) {
+                // Load the image from assets on a separate thread
+                new Thread(() -> {
+                    try {
+                        InputStream inputStream = context.getAssets().open("cat.jpg");
+                        imageBitmap = BitmapFactory.decodeStream(inputStream);
+                        inputStream.close();
+                        draw();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+
+            @Override
+            public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
+                draw();
+            }
+
+            @Override
+            public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
+                // Handle surface destruction if necessary
             }
         });
-        videoView.setOnCompletionListener(mp -> {
-            videoView.seekTo(0);
-            videoView.start();
-        });
     }
 
-    @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        if (call.method.equals("pauseVideo")) {
-            pauseVideo();
-            result.success(null);
-        } else if (call.method.equals("resumeVideo")) {
-            resumeVideo();
-            result.success(null);
-        } else {
-            result.notImplemented();
-        }
-    }
+    private void draw() {
+        if (imageBitmap != null) {
+            Canvas canvas = surfaceView.getHolder().lockCanvas();
+            if (canvas != null) {
+                // Center the image in the SurfaceView
+                int canvasWidth = canvas.getWidth();
+                int canvasHeight = canvas.getHeight();
+                int imageWidth = imageBitmap.getWidth();
+                int imageHeight = imageBitmap.getHeight();
+                float scale = Math.min((float) canvasWidth / imageWidth, (float) canvasHeight / imageHeight);
 
-    private void pauseVideo() {
-        if (videoView.isPlaying()) {
-            videoView.pause();
-            currentPosition = videoView.getCurrentPosition();
-            isPlaying = false;
-        }
-    }
+                float x = (canvasWidth - imageWidth * scale) / 2;
+                float y = (canvasHeight - imageHeight * scale) / 2;
 
-    private void resumeVideo() {
-        if (!videoView.isPlaying()) {
-            isPlaying = true;
-            videoView.start();
-            videoView.seekTo(currentPosition);
+                canvas.save();
+                canvas.scale(scale, scale);
+                canvas.drawBitmap(imageBitmap, x / scale, y / scale, null);
+                canvas.restore();
+
+                surfaceView.getHolder().unlockCanvasAndPost(canvas);
+            }
         }
     }
 
     @Nullable
     @Override
     public View getView() {
-        return videoView;
+        return surfaceView;
     }
 
     @Override
     public void dispose() {
-        videoView.stopPlayback();
+        // Clean up any resources here if necessary
     }
 }
