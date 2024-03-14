@@ -24,6 +24,7 @@ public class AndroidSurfaceView implements PlatformView {
 
     public AndroidSurfaceView(Context context, BinaryMessenger messenger, int viewId) {
         surfaceView = new SurfaceView(context);
+        surfaceView.setBackgroundColor(0x50FF6600);
 
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
