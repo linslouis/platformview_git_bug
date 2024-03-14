@@ -52,6 +52,18 @@ public class AndroidVideoPlayer implements PlatformView, MethodChannel.MethodCal
         }
     }
 
+    @Override
+    public void onInputConnectionLocked() {
+        pauseVideo();
+        PlatformView.super.onInputConnectionLocked();
+    }
+
+    @Override
+    public void onInputConnectionUnlocked() {
+        PlatformView.super.onInputConnectionUnlocked();
+        resumeVideo();
+    }
+
     private void pauseVideo() {
         if (videoView.isPlaying()) {
             videoView.pause();
