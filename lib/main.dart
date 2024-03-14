@@ -14,7 +14,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   double heightValue = 300;
-  bool isControllerInitialized = false;
+
+  // Add a key based on the heightValue to force widget recreation on size change.
+  ValueKey heightKey = ValueKey(300);
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +26,17 @@ class _MyAppState extends State<MyApp> {
           children: [
             SizedBox(
               height: heightValue,
-              child: const AndroidSurfaceView(),
+              // Pass the dynamic key to the AndroidSurfaceView
+              child: AndroidSurfaceView(key: heightKey),
             ),
             ElevatedButton(
-              onPressed: // Check if the controller is initialized
-                  () async {
+              onPressed: () async {
                 setState(() {
                   heightValue += 50; // Increase height
+                  // Update the key to a new one, based on the new heightValue
+                  heightKey = ValueKey(heightValue);
                 });
               },
-              // Disable the button if the controller is not initialized
               child: const Text('Increase Height'),
             ),
           ],
@@ -56,8 +59,9 @@ class AndroidSurfaceView extends StatefulWidget {
 class _AndroidSurfaceViewState extends State<AndroidSurfaceView> {
   @override
   Widget build(BuildContext context) {
-    return const AndroidView(
+    return AndroidView(
       viewType: 'lins.platform.learn/VideoPlayer',
+      // Additional AndroidView parameters as needed, e.g., creationParams
     );
   }
 }
