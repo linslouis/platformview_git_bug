@@ -21,7 +21,7 @@ import io.flutter.plugin.platform.PlatformView;
 
 public class AndroidSurfaceView implements PlatformView, SurfaceHolder.Callback {
 
-    private static final String TAG = "AndroidSurfaceView";
+    private static final String TAG = "========linslog======";
     private final SurfaceView surfaceView;
     private Bitmap imageBitmap = null;
     private ImageReader imageReader;
@@ -107,6 +107,8 @@ public class AndroidSurfaceView implements PlatformView, SurfaceHolder.Callback 
     @Override
     public void dispose() {
         // Clean up resources
+        Log.d(TAG, "Surface disposed");
+
         if (imageBitmap != null) {
             imageBitmap.recycle();
             imageBitmap = null;

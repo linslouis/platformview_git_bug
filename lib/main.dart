@@ -59,7 +59,7 @@ class AndroidSurfaceView extends StatefulWidget {
 class _AndroidSurfaceViewState extends State<AndroidSurfaceView> {
   @override
   Widget build(BuildContext context) {
-    return AndroidView(
+    return const AndroidView(
       viewType: 'lins.platform.learn/VideoPlayer',
       // Additional AndroidView parameters as needed, e.g., creationParams
     );
