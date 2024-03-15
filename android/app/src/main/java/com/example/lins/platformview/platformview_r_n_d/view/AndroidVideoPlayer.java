@@ -37,6 +37,8 @@ public class AndroidVideoPlayer implements PlatformView, MethodChannel.MethodCal
             videoView.seekTo(0);
             videoView.start();
         });
+
+
     }
 
     @Override

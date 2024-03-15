@@ -16,6 +16,8 @@ class _MyAppState extends State<MyApp> {
   double heightValue = 300; // Initial height of the video player
   AndroidVideoPlayerController? videoController; // Make it nullable
   bool isControllerInitialized = false; // Track if the controller is initialized
+  ValueKey heightKey = const ValueKey(300);
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class _MyAppState extends State<MyApp> {
             children: [
               SizedBox(
                 height: heightValue,
-                child: AndroidVideoPlayer(
+                child: AndroidVideoPlayer(key: heightKey,
                   onAndroidVideoPlayerCreated: (controller) {
                     setState(() {
                       videoController = controller;
@@ -40,7 +42,9 @@ class _MyAppState extends State<MyApp> {
                     ? () async {
                   await videoController?.pauseVideo();
                   setState(() {
+
                     heightValue += 50; // Increase height
+                    heightKey = ValueKey(heightValue);
                   });
                   await videoController?.resumeVideo();
                 }
