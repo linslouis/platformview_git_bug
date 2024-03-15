@@ -16,7 +16,7 @@ class _MyAppState extends State<MyApp> {
   double heightValue = 300;
 
   // Add a key based on the heightValue to force widget recreation on size change.
-  ValueKey heightKey = ValueKey(300);
+  ValueKey heightKey = const ValueKey(300);
 
   @override
   Widget build(BuildContext context) {
