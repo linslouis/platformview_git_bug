@@ -64,6 +64,7 @@ public class AndroidSurfaceView implements PlatformView, SurfaceHolder.Callback 
                     // Drawing code remains unchanged
                     canvas.drawBitmap(imageBitmap, 0, 0, null);
                 } finally {
+
                     surfaceView.getHolder().unlockCanvasAndPost(canvas);
                 }
             }
