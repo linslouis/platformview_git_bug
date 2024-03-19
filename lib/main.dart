@@ -24,9 +24,12 @@ class _MyAppState extends State<MyApp> {
           children: [
             SizedBox(
               height: heightValue,
-              child: const AndroidView(
-                viewType: 'lins.platform.learn/VideoPlayer',
-              ),
+// Example of using a stable Key for AndroidView in Flutter
+                child: const AndroidView(
+                  key: GlobalObjectKey('video_player_key'), // Use a stable key
+                  viewType: 'lins.platform.learn/VideoPlayer',
+                ),
+
             ),
             ElevatedButton(
               onPressed: () async {
