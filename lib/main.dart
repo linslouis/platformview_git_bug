@@ -13,10 +13,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const platform = MethodChannel('com.example.lins.platformview/video');
   double heightValue = 300;
-
-  // Add a key based on the heightValue to force widget recreation on size change.
-  ValueKey heightKey = const ValueKey(300);
 
   @override
   Widget build(BuildContext context) {
@@ -26,42 +24,25 @@ class _MyAppState extends State<MyApp> {
           children: [
             SizedBox(
               height: heightValue,
-              // Pass the dynamic key to the AndroidSurfaceView
-              child: AndroidSurfaceView(key: heightKey),
+              child: const AndroidView(
+                viewType: 'lins.platform.learn/VideoPlayer',
+              ),
             ),
             ElevatedButton(
               onPressed: () async {
                 setState(() {
                   heightValue += 50; // Increase height
-                  // Update the key to a new one, based on the new heightValue
-                  heightKey = ValueKey(heightValue);
                 });
+                await platform.invokeMethod('resize', {'height': heightValue});
               },
               child: const Text('Increase Height'),
             ),
           ],
         ),
         appBar: AppBar(
-          title: const Text('Platform Surface Bug'),
+          title: const Text('Platform Surface Video Player'),
         ),
       ),
-    );
-  }
-}
-
-class AndroidSurfaceView extends StatefulWidget {
-  const AndroidSurfaceView({Key? key}) : super(key: key);
-
-  @override
-  State<AndroidSurfaceView> createState() => _AndroidSurfaceViewState();
-}
-
-class _AndroidSurfaceViewState extends State<AndroidSurfaceView> {
-  @override
-  Widget build(BuildContext context) {
-    return const AndroidView(
-      viewType: 'lins.platform.learn/VideoPlayer',
-      // Additional AndroidView parameters as needed, e.g., creationParams
     );
   }
 }
